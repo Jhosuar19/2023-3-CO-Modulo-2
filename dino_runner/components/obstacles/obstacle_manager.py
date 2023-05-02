@@ -1,4 +1,4 @@
-import pygame
+import pygame,random
 
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.components.obstacles.cactus import Cactus
@@ -11,24 +11,24 @@ class ObstacleManager:
     
     
   def generate_obstacle(self):
-    obstacle = Cactus(SMALL_CACTUS)
-    obstacle = Cactus(LARGE_CACTUS)
-    obstacle = Bird(BIRD)
-    return obstacle
-
+        obstacle = [Cactus(SMALL_CACTUS),Cactus(LARGE_CACTUS), Bird(BIRD)]
+        randomObstacle = random.choice(obstacle)
+        return randomObstacle
+  
   def update(self, game):
-    if len(self.obstacles) == 0:
-      obstacle = self.generate_obstacle()
-      self.obstacles.append(obstacle)
-      
-      
-      for obstacle in self.obstacles:
-        obstacle.update(game.game_speed, self.obstacles)
-        if game.player.dino_rect.colliderect(obstacle.rect):
-          game.playing = False
-          pygame.time.delay(1000)
-          break
+        if len(self.obstacles) == 0:
+            obstacle = self.generate_obstacle()
+            self.obstacles.append(obstacle)
 
+        for obstacle in self.obstacles:
+            obstacle.update(game.game_speed, self.obstacles)
+            if game.player.dino_rect.colliderect(obstacle.rect):
+                game.playing = False
+                pygame.time.delay(1000)
+                game.death_count += 1
+
+            break
+            
   def draw(self, screen):
-    for obstacle in self.obstacles:
-      obstacle.draw(screen)
+        for obstacle in self.obstacles:
+            obstacle.draw(screen)

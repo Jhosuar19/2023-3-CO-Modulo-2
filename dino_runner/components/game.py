@@ -4,6 +4,7 @@ from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, T
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.menu import Menu
 
 class Game:
     def __init__(self):
@@ -18,6 +19,18 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.menu = Menu('Press any key to start...', self.screen)
+        self.deaht_count = 0
+        self.score = 0
+    
+    def execute(self):
+        self.running = True
+        while self.playing:
+            if not self.playing:
+                self.show_menu()
+        pygame.display.quit()
+        pygame.quit()
+
 
     def run(self):
         # Game loop: events - update - draw
@@ -26,7 +39,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
-        pygame.quit()
+        
 
     def events(self):
         for event in pygame.event.get():
@@ -56,3 +69,32 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+    def show_menu(self):
+        half_screen_height = SCREEN_HEIGHT
+        half_screen_width = SCREEN_WIDTH
+        self.menu.reset_screen_color(self.screen)
+        if self.death_count > 0:
+            self.menu.update_message(' New message')
+
+            self.menu.draw(self.screen)
+            self.screen.clit(ICON, [half_screen_height - 50, half_screen_width - 150])
+            self.menu.update(self)
+            
+    def handle_events_on_menu(self, game):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game.running = False
+                game.playing = False
+            elif event.type == pygame.KEYDOWN:
+                game.run()
+
+    def insert_screen_color(self, screen):
+        screen.fill(255, 255, 255)
+
+    def update_score(self):
+        self.score += 1
+
+    def draw_score(self):
+        font = pygame.font.Font(FONT_STYLE, 30)
+        text = font.render(f'Score: (self.score)')

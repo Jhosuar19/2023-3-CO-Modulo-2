@@ -18,7 +18,5 @@ class Obstacle(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image[self.obstacle_type], (self.rect.x, self.rect.y))
-        if self.index >= 9:
-            self.index = 0
-            screen.blit(self.image[self.obstacle_type], (self.rect.x, self.rect.y))
-        self.index += 1
+
+    
