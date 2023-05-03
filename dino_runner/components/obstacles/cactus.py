@@ -17,6 +17,4 @@ class Cactus(Obstacle):
             
             self.rect.y = 305
         else:
-            
             self.rect.y = 325
-               
