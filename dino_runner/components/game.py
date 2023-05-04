@@ -19,7 +19,7 @@ class Game:
         self.playing = False
         self.initial_game_speed = 20
         self.game_speed = self.initial_game_speed 
-        self.TIME_PER_DAY = 500
+        self.TIME_PER_DAY = 200
         self.time = 0
         self.background_dark_color = False
         self.x_pos_bg = 0
@@ -28,7 +28,7 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.menu = Menu('Press any key to start...', self.screen)
         self.score_manager = ScoreManager(self.screen)
-        self.power_up_manager = PowerUpManager()
+        self.power_up_manager = PowerUpManager(self.screen)
         self.moon_color = (255, 255, 255)
         self.moon_radius = 80
         self.moon_pos = (600, 100)
@@ -71,7 +71,6 @@ class Game:
             self.obstacle_manager.update(self)
             self.power_up_manager.update(self)
 
-            
         if self.score_manager.score % 100 == 0 and self.game_speed < 250:
             self.game_speed += 5
 
@@ -131,17 +130,17 @@ class Game:
         self.background_dark_color = False
         self.power_up_manager.reset()
     
-    def draw_power_up_time(self,screen):
+    def draw_power_up_time(self, screen):
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
         if self.player.has_power_up:
-            time_to_show = round((self.player.power_time_up - pygame.time.get.ticks())/ 1000, 2)
+            time_to_show = round((self.player.power_time_up - pygame.time.get_ticks())/ 1000, 2)
 
             if time_to_show >= 0:
                 game_font = pygame.font.Font(None, 30)
                 game_over_surface = game_font.render(f'{self.player.type.capitalize()} is enable for {time_to_show} seconds', True, (255, 0, 0))
-                pos = half_screen_height + 185 , half_screen_width - 450 
-                screen.blit(game_over_surface, pos)
+                pos = half_screen_height + 100 , half_screen_width + 200
+                self.screen.blit(game_over_surface, pos)
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE

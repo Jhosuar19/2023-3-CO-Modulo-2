@@ -62,14 +62,14 @@ class Dinosaur(Sprite):
         self.step_index += 1
 
     def jump(self):
+        self.image = JUM_IMG[self.type]
+        self.dino_rect.y -= self.jump_speed * 4
+        self.jump_speed -= 0.8
+        
         if not self.sound_playing:
             jump_sound = pygame.mixer.Sound('dino_runner/assets/Other/SaltoM.mp3')
             jump_sound.play()
             self.sound_playing = True
-            
-        self.image = JUM_IMG[self.type]
-        self.dino_rect.y -= self.jump_speed * 4
-        self.jump_speed -= 0.8
             
         if self.jump_speed < -self.JUMP_SPEED:
             self.dino_rect.y = self.Y_POS

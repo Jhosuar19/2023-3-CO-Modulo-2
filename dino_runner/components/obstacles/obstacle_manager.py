@@ -1,9 +1,9 @@
-import pygame,random
+import pygame, random
 
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.utils.constants import SHIELD_TYPE
-
+from dino_runner.utils.constants import HAMMER
 from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD
 
 class ObstacleManager:
@@ -11,7 +11,7 @@ class ObstacleManager:
     self.playing = True
     self.obstacles = []
     self.hit_sound = pygame.mixer.Sound('dino_runner/assets/Other/Está_Muerto.mp3')
-    
+    self.hammer = False
     
     
   def generate_obstacle(self):
@@ -29,6 +29,9 @@ class ObstacleManager:
             if game.player.dino_rect.colliderect(obstacle.rect):
               if game.player.type != SHIELD_TYPE:
                   game.playing = False
+              if game.player.type == HAMMER:
+                  self.obstacles.remove(obstacle)
+                  self.hammer = False   
                   pygame.time.delay(1000)
                   game.score_manager.death_count += 1
                   self.hit_sound.play()
